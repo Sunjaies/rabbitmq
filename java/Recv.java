@@ -13,13 +13,15 @@ public class Recv {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        //channel.queueDelete(QUEUE_NAME);
+        //channel.queueDelete("hello2");
+        channel.queueDeclare(QUEUE_NAME, false, false, true, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
         };
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+        channel.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> { });
     }
 }
